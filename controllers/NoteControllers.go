@@ -49,42 +49,27 @@ func (controllers *NoteControllers) Index(w http.ResponseWriter, r *http.Request
 }
 
 func (controllers *NoteControllers) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	_, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
 
-	if r.Method == "POST" {
-		note := models.Note{
-			Assignee: r.FormValue("assignee"),
-			Content:  r.FormValue("content"),
-			Date:     r.FormValue("date"),
-		}
-		result := db.Create(&note)
-		if result.Error != nil {
-			log.Println(result.Error)
-		}
-		http.Redirect(w, r, "/", http.StatusFound)
-
-	} else {
-		files := []string{
-			"./views/base.html",
-			"./views/create.html",
-		}
-		htmlTemplate, err := template.ParseFiles(files...)
-		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, "internal server error", http.StatusInternalServerError)
-			return
-		}
-
-		err = htmlTemplate.ExecuteTemplate(w, "base", nil)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Println(err.Error())
-		}
+	files := []string{
+		"./views/base.html",
+		"./views/create.html",
+	}
+	htmlTemplate, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
 	}
 
+	err = htmlTemplate.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println(err.Error())
+	}
 }
 
 func (controllers *NoteControllers) Edit(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -109,6 +94,7 @@ func (controllers *NoteControllers) Edit(w http.ResponseWriter, r *http.Request,
 
 	data := map[string]interface{}{
 		"Note": note,
+		"ID":   params.ByName("id"),
 	}
 
 	err = templateHtml.ExecuteTemplate(w, "base", data)
@@ -117,4 +103,57 @@ func (controllers *NoteControllers) Edit(w http.ResponseWriter, r *http.Request,
 		log.Println(err.Error())
 	}
 
+}
+
+func (controllers *NoteControllers) Update(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
+
+	noteID := params.ByName("id")
+	var note models.Note
+	db.Where("ID=?", noteID).First(&note)
+	note.Assignee = r.FormValue("assignee")
+	note.Date = r.FormValue("date")
+	note.Content = r.FormValue("content")
+
+	db.Save(&note)
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (controllers *NoteControllers) Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
+
+	note := models.Note{
+		Assignee: r.FormValue("assignee"),
+		Content:  r.FormValue("content"),
+		Date:     r.FormValue("date"),
+	}
+	result := db.Create(&note)
+	if result.Error != nil {
+		log.Println(result.Error)
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+
+}
+
+func (controllers *NoteControllers) Done(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	db, err := ConnectionDatabase()
+	if err != nil {
+		panic(err.Error())
+	}
+	var note models.Note
+
+	db.Find(&note, params.ByName("id"))
+
+	note.IsDone = !note.IsDone
+
+	db.Save(&note)
+
+	http.Redirect(w, r, "/", http.StatusFound)
 }

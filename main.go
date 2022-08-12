@@ -27,8 +27,10 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", noteControler.Index)
 	router.GET("/create", noteControler.Create)
-	router.POST("/create", noteControler.Create)
+	router.POST("/create", noteControler.Store)
 	router.GET("/edit/:id", noteControler.Edit)
+	router.POST("/edit/:id", noteControler.Update)
+	router.POST("/done/:id", noteControler.Done)
 
 	// fmt.Println("aman boss")
 	port := ":8080"
