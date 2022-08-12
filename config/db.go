@@ -6,6 +6,6 @@ import (
 )
 
 func ConnectionDatabase() (db *gorm.DB, err error) {
-	db, err = gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	db, err = gorm.Open(sqlite.Open("store.db"), &gorm.Config{})
 	return db, err
 }

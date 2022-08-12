@@ -2,20 +2,19 @@ package controllers
 
 import (
 	"log"
+	"miniproject/config"
 	"miniproject/models"
 	"net/http"
 	"text/template"
 
 	"github.com/julienschmidt/httprouter"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 type NoteControllers struct {
 }
 
 func (controllers *NoteControllers) Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	db, err := config.ConnectionDatabase()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -49,7 +48,7 @@ func (controllers *NoteControllers) Index(w http.ResponseWriter, r *http.Request
 }
 
 func (controllers *NoteControllers) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	_, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	_, err := config.ConnectionDatabase()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -73,7 +72,7 @@ func (controllers *NoteControllers) Create(w http.ResponseWriter, r *http.Reques
 }
 
 func (controllers *NoteControllers) Edit(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	db, err := config.ConnectionDatabase()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -106,7 +105,7 @@ func (controllers *NoteControllers) Edit(w http.ResponseWriter, r *http.Request,
 }
 
 func (controllers *NoteControllers) Update(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	db, err := config.ConnectionDatabase()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -124,7 +123,7 @@ func (controllers *NoteControllers) Update(w http.ResponseWriter, r *http.Reques
 }
 
 func (controllers *NoteControllers) Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	db, err := config.ConnectionDatabase()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -143,7 +142,7 @@ func (controllers *NoteControllers) Store(w http.ResponseWriter, r *http.Request
 }
 
 func (controllers *NoteControllers) Done(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	db, err := ConnectionDatabase()
+	db, err := config.ConnectionDatabase()
 	if err != nil {
 		panic(err.Error())
 	}

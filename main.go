@@ -3,17 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
+	"miniproject/config"
 	"miniproject/controllers"
 	"miniproject/models"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	db, err := config.ConnectionDatabase()
 	if err != nil {
 		panic(err.Error())
 	}

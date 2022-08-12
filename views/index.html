@@ -41,7 +41,7 @@ Dashboard
                         <button type="button" class="btn btn-success">Done  </button>
                         {{else}}
                         <a href="/edit/{{$note.ID}}" class="btn btn-warning"> Ubah </a>
-                        <form action="done/{{$note.ID}}" method="post">
+                        <form class="d-inline" action="done/{{$note.ID}}" method="post">
                             <button type="submit" class= "btn btn-info"> Selesai </button>
                         </form>
                         {{end}}    
