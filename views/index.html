@@ -40,7 +40,7 @@ Dashboard
                         {{if $note.IsDone}}
                         <button type="button" class="btn btn-success">Done  </button>
                         {{else}}
-                        <a href="#" class="btn btn-warning"> Ubah </a>
+                        <a href="/edit/{{$note.ID}}" class="btn btn-warning"> Ubah </a>
                         <a href="#" class="btn btn-info"> Selesai </a>
                         {{end}}    
 

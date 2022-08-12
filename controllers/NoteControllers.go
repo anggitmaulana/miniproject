@@ -86,3 +86,35 @@ func (controllers *NoteControllers) Create(w http.ResponseWriter, r *http.Reques
 	}
 
 }
+
+func (controllers *NoteControllers) Edit(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
+	files := []string{
+		"./views/base.html",
+		"./views/edit.html",
+	}
+
+	templateHtml, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	var note models.Note
+	db.Where("ID=?", params.ByName("id")).Find(&note)
+
+	data := map[string]interface{}{
+		"Note": note,
+	}
+
+	err = templateHtml.ExecuteTemplate(w, "base", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println(err.Error())
+	}
+
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"miniproject/controllers"
 	"miniproject/models"
@@ -27,8 +28,11 @@ func main() {
 	router.GET("/", noteControler.Index)
 	router.GET("/create", noteControler.Create)
 	router.POST("/create", noteControler.Create)
+	router.GET("/edit/:id", noteControler.Edit)
 
 	// fmt.Println("aman boss")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	port := ":8080"
+	fmt.Println("Aplikasi ini jalan di http://localhost:8080")
+	log.Fatal(http.ListenAndServe(port, router))
 
 }

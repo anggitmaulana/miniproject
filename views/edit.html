@@ -1,0 +1,44 @@
+{{define "title"}}
+Ubah Task
+{{end}}
+
+{{define "css"}}
+{{end}}
+
+{{define "script"}}
+{{end}}
+
+{{define "main"}}
+<form action="" method="post">
+    <div class="h4 pb-1 mb-5 text-danger border-bottom border-danger fs-1" >Ubah Task</div>
+
+    <div class="row mb-2">
+        <div class="col-2" style="text-align: end">Task Detail </div>
+        <div class="col-6">
+            <textarea name="content" placeholder="Masukkan Task" class="form-control border-primary"></textarea>
+        </div>
+    </div>
+    
+    <div class="row mb-2">
+        <div class="col-2" style="text-align: end">Assignee </div>
+        <div class="col-6">
+            <input class="form-control border-primary" type="text" name="assignee" placeholder="Masukkan Penerima">
+        </div>
+    </div>
+    
+    <div class="row mb-2">
+        <div class="col-2" style="text-align: end">Deadline </div>
+        <div class="col-6">
+            <input class="form-control border-primary" type="date" name="date">
+        </div>
+    </div>
+    
+    <div class="row mb-2">
+        <div class="col-6 offset-2">
+            <button class="btn btn-outline-primary" type="submit">Submit</button>
+        </div>
+    </div>
+    
+
+</form>
+{{end}}
